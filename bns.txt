@@ -1,0 +1,34 @@
+1. Explain what the calculations above might or might not tell you about the "fairness" of your Naive Bayesian network.
+
+The calculations show that the model may be biased against women. When we leave out gender information, 99.96% of women
+are predicted to have a higher chance of earning more than $50K. However, when gender is included, those predictions
+drop significantly for women, while predictions for men stay the same. This shows that adding gender information
+negatively affects women's predictions but doesn't impact men's, meaning the model is unfair to women.
+
+Moreover, only 8.06% of women are assigned a probability greater than 0.5 of earning over $50K, compared to 25.42% of
+men. This disparity suggests the model fails to achieve demographic parity, as the distribution of high-salary
+predictions is not equal across genders. The significant difference in probabilities when Gender is included versus
+excluded indicates that the model’s predictions are not well separated from gender, violating the criterion of
+independence. Additionally, since the actual salaries differ based on gender even when the predicted probabilities
+are similar, the model does not meet the sufficiency criterion.
+
+These results suggest that the model has learned gender biases likely present in the training data, highlighting the
+importance of ensuring fairness in the data and model-building process.
+
+2. Would you be willing to use your model to recommend starting salaries for employees at a firm? Why or why not?
+
+Given these fairness issues, I would not be willing to use this model to recommend starting salaries for employees at a
+firm. The model clearly demonstrates a gender bias, as it predicts significantly lower chances of high earnings for
+women compared to men, even when similar evidence is present. Such bias could lead to unequal pay, especially if the
+model’s recommendations are used to set initial salaries, which could perpetuate or even exacerbate existing gender
+inequalities in the workplace.
+
+Using this model could be considered unethical as it may contribute to ongoing disparities between men and women. It
+could also expose the firm to legal liabilities related to discrimination and unequal pay practices, which would harm
+both employees and the firm’s reputation. Instead, it would be more responsible to develop a model that ensures
+fairness, either by excluding sensitive attributes like gender altogether or by applying fairness-aware machine
+learning techniques to mitigate the biases.
+
+To ensure fairness in salary recommendations, the model should be retrained with a focus on addressing historical
+biases that may have been present in the training data. The goal should be to promote equal opportunities for all
+employees, regardless of their gender or other potentially sensitive attributes.
