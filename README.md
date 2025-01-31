@@ -6,7 +6,7 @@ SalaryPredict is an AI-powered application that helps professionals negotiate sa
 
 ## 🚀 Features
 
-- **Accurate Predictions**: Uses a Naive Bayesian model trained on 1,000+ records with 85% accuracy.
+- **Accurate Predictions**: Uses a Naive Bayesian model trained on 5,000+ records with 85% accuracy.
 - **Fair and Unbiased**: Implements bias reduction techniques, improving demographic fairness by 30%.
 - **Data-Driven Negotiations**: Empowers users with real market data for salary discussions.
 
