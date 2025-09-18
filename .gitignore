@@ -47,3 +47,7 @@ frontend/dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Large data files (>100MB)
+data/survey_results_public.csv
+data/stackoverflow-2024-survey.zip
