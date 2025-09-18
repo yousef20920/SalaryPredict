@@ -9,11 +9,22 @@ A modern, data-driven web application that predicts developer salaries using mac
 
 ## 🖥️ Screenshots
 
-*Screenshots will be added soon to showcase the application interface.*
+> **Note**: Add your PNG screenshot files to `docs/images/` to display them here.
 
-### Coming Soon:
-- **Prediction Results**: Real-time salary prediction with probability distributions and data insights
-- **Welcome Interface**: Clean, educational interface explaining the ML approach
+### Prediction Results
+![Salary Prediction Results](docs/images/prediction-results.png)
+*Real-time salary prediction with probability distributions and data insights*
+
+### Welcome Interface
+![Welcome Interface](docs/images/welcome-interface.png)
+*Clean, educational interface explaining the ML approach*
+
+**To add screenshots:**
+1. Save your app screenshots as PNG files
+2. Name them `prediction-results.png` and `welcome-interface.png`
+3. Place them in the `docs/images/` folder
+4. Remove the `.placeholder` files
+5. Commit and push the changes
 
 ## 🎯 Overview
 
