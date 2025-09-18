@@ -15,23 +15,23 @@ CORS(app)  # Enable CORS for all routes
 # Global variables to store the trained model
 trained_model = None
 variable_domains = {
-    "Work": ['Not Working', 'Government', 'Private', 'Self-emp'],
-    "Education": ['<Gr12', 'HS-Graduate', 'Associate', 'Professional', 'Bachelors', 'Masters', 'Doctorate'],
-    "Occupation": ['Admin', 'Military', 'Manual Labour', 'Office Labour', 'Service', 'Professional'],
-    "MaritalStatus": ['Not-Married', 'Married', 'Separated', 'Widowed'],
-    "Relationship": ['Wife', 'Own-child', 'Husband', 'Not-in-family', 'Other-relative', 'Unmarried'],
-    "Race": ['White', 'Black', 'Asian-Pac-Islander', 'Amer-Indian-Eskimo', 'Other'],
-    "Gender": ['Male', 'Female'],
-    "Country": ['North-America', 'South-America', 'Europe', 'Asia', 'Middle-East', 'Carribean'],
-    "Salary": ['<50K', '>=50K']
+    "Age": ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+    "Education": ['High School or Less', 'Some College', 'Associate', 'Professional/PhD', 'Other'],
+    "Employment": ['Full-time', 'Part-time', 'Contractor/Freelance'],
+    "RemoteWork": ['In-person', 'Hybrid'],
+    "Experience": ['<1 year', '1-2 years', '3-5 years', '6-10 years', '11-15 years', '15+ years'],
+    "DevType": ['Full-stack', 'Backend', 'Frontend', 'Mobile', 'Data Science', 'DevOps/SRE', 'Other'],
+    "CompanySize": ['Small (1-9)', 'Medium (10-19)', 'Medium (20-99)', 'Large (100-499)', 'Large (500-999)', 'Enterprise (1K-5K)', 'Enterprise (5K+)'],
+    "Country": ['United States', 'Germany', 'United Kingdom', 'India', 'Canada', 'France', 'Netherlands', 'Australia', 'Brazil', 'Poland', 'Other'],
+    "Salary": ['<50K', '50K-75K', '75K-100K', '100K-150K', '150K+']
 }
 
 def load_model():
     """Load the trained Naive Bayes model"""
     global trained_model
     if trained_model is None:
-        print("Loading model...")
-        trained_model = naive_bayes_model('data/adult-train.csv', variable_domains)
+        print("Loading Stack Overflow developer survey model...")
+        trained_model = naive_bayes_model('data/stackoverflow-train.csv', variable_domains)
         print("Model loaded successfully!")
     return trained_model
 
@@ -61,8 +61,8 @@ def predict_salary():
             return jsonify({"error": "No data provided"}), 400
         
         # Validate required fields
-        required_fields = ['Work', 'Education', 'Occupation', 'MaritalStatus', 
-                          'Relationship', 'Race', 'Gender', 'Country']
+        required_fields = ['Age', 'Education', 'Employment', 'RemoteWork', 
+                          'Experience', 'DevType', 'CompanySize', 'Country']
         
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
@@ -75,6 +75,31 @@ def predict_salary():
         
         # Load model if not loaded
         model = load_model()
+        
+        # Calculate similar developer counts for transparency
+        import pandas as pd
+        training_data = pd.read_csv('data/stackoverflow-train.csv')
+        
+        # Count developers with similar characteristics
+        similar_devs = training_data.copy()
+        total_training_size = len(training_data)
+        
+        # Filter by each input characteristic and count matches
+        match_counts = {}
+        for field, value in data.items():
+            if field in training_data.columns:
+                matches = len(training_data[training_data[field] == value])
+                match_counts[field] = matches
+        
+        # Count developers with exact same profile (all features match)
+        exact_matches = training_data
+        for field, value in data.items():
+            if field in training_data.columns:
+                exact_matches = exact_matches[exact_matches[field] == value]
+        exact_match_count = len(exact_matches)
+        
+        # Count developers in each salary bracket for context
+        salary_distribution = training_data['Salary'].value_counts().to_dict()
         
         # Create variable dictionary for the model
         variables = {var.name: var for var in model.variables()}
@@ -107,15 +132,32 @@ def predict_salary():
         predicted_salary = max(probabilities.keys(), key=lambda k: probabilities[k])
         confidence = probabilities[predicted_salary]
         
+        # Format salary range for display
+        salary_display = {
+            '<50K': 'Less than $50,000',
+            '50K-75K': '$50,000 - $75,000', 
+            '75K-100K': '$75,000 - $100,000',
+            '100K-150K': '$100,000 - $150,000',
+            '150K+': '$150,000 or more'
+        }
+        
         # Reset evidence for all variables
         for var in evidence_vars:
             var.evidence_index = None
         
         return jsonify({
             "prediction": predicted_salary,
+            "prediction_display": salary_display.get(predicted_salary, predicted_salary),
             "confidence": confidence,
             "probabilities": probabilities,
-            "input_data": data
+            "input_data": data,
+            "data_insights": {
+                "total_training_samples": total_training_size,
+                "exact_profile_matches": exact_match_count,
+                "feature_matches": match_counts,
+                "salary_distribution": salary_distribution,
+                "similar_developers_note": f"This prediction is based on analyzing patterns from {total_training_size:,} real developer profiles from Stack Overflow's 2023 survey."
+            }
         })
         
     except Exception as e:
@@ -123,8 +165,8 @@ def predict_salary():
         return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    print("Starting Salary Prediction API...")
-    print("Loading model on startup...")
+    print("Starting Developer Salary Prediction API...")
+    print("Loading Stack Overflow developer survey model on startup...")
     load_model()
     print("API ready!")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
