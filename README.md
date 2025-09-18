@@ -9,13 +9,11 @@ A modern, data-driven web application that predicts developer salaries using mac
 
 ## 🖥️ Screenshots
 
-### Prediction Results
-![Salary Prediction Results](docs/images/prediction-results.png)
-*Real-time salary prediction with probability distributions and data insights*
+*Screenshots will be added soon to showcase the application interface.*
 
-### Welcome Interface
-![Welcome Interface](docs/images/welcome-interface.png)
-*Clean, educational interface explaining the ML approach*
+### Coming Soon:
+- **Prediction Results**: Real-time salary prediction with probability distributions and data insights
+- **Welcome Interface**: Clean, educational interface explaining the ML approach
 
 ## 🎯 Overview
 
