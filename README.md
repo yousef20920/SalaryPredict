@@ -12,11 +12,11 @@ A modern, data-driven web application that predicts developer salaries using mac
 > **Note**: Add your PNG screenshot files to `docs/images/` to display them here.
 
 ### Prediction Results
-![Salary Prediction Results](docs/images/prediction-results.png)
+![Salary Prediction Results](docs/images/prediction.png)
 *Real-time salary prediction with probability distributions and data insights*
 
 ### Welcome Interface
-![Welcome Interface](docs/images/welcome-interface.png)
+![Welcome Interface](docs/images/welcome.png)
 *Clean, educational interface explaining the ML approach*
 
 **To add screenshots:**
